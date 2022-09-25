@@ -54,8 +54,8 @@ if __name__ == '__main__':
     top_k = 10
     query_path = query_cfg.get('query-path', 'queries.txt')
     query_start = query_cfg.get('query-id-start', 0)
-
-
+    avg_p_path = "bm25.avg_p.txt"
+    file=open(avg_p_path,'w')
     query = metapy.index.Document()
     print('Running queries')
     with open(query_path) as query_file:
@@ -64,5 +64,8 @@ if __name__ == '__main__':
             results = ranker.score(idx, query, top_k)
             avg_p = ev.avg_p(results, query_start + query_num, top_k)
             print("Query {} average precision: {}".format(query_num + 1, avg_p))
+            file.write(str(avg_p) + '\n')
+        file.close()
     print("Mean average precision: {}".format(ev.map()))
     print("Elapsed: {} seconds".format(round(time.time() - start_time, 4)))
+
